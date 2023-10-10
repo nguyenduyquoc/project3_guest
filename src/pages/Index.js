@@ -43,7 +43,7 @@ import logo from './../assets/images/logo.png';
 import logoWhite from './../assets/images/logo-white.png';
 
 function Index(props){
-	var baseName = 'react/demo';
+	var baseName = '';
 	return(
 		<BrowserRouter basename={baseName}>
 			<div className="page-wraper">
@@ -52,7 +52,7 @@ function Index(props){
 					<Route path='/under-construction' component={UnderConstruction} />
 					<Route path='/coming-soon' component={ComingSoon} />
 
-					{/*<Route path="/index-2" exact>
+					<Route path="/index-2" exact>
 						<Header />
 							<Main>
 								<Switch>
@@ -60,7 +60,7 @@ function Index(props){
 								</Switch>
 							</Main>
 						<Footer  footerChange="footer-dark" logoImage={logoWhite} />		
-					</Route>*/}
+					</Route>
 
 					<Route>
 						<Header />

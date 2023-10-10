@@ -15,8 +15,8 @@ import partner1 from './../../assets/images/partner/partner-1.png';
 import partner2 from './../../assets/images/partner/partner-2.png';
 import partner3 from './../../assets/images/partner/partner-3.png';
 import group from './../../assets/images/Group.png';
-import media1 from './../../assets/images/banner/banner-media.png';
-import media2 from './../../assets/images/banner/banner-media2.png';
+import media1 from './../../assets/images/banner/banner-media2.png';
+import media2 from './../../assets/images/banner/banner-media4.png';
 import book16 from './../../assets/images/books/book16.png';
 import book9 from './../../assets/images/books/grid/book9.jpg';
 
@@ -27,6 +27,14 @@ import book9 from './../../assets/images/books/grid/book9.jpg';
 
 import SwiperCore, {EffectFade, Autoplay, FreeMode, Parallax,Thumbs, Pagination} from 'swiper';
 SwiperCore.use([Parallax,Thumbs, FreeMode,Autoplay, Pagination, EffectFade ]);
+/*
+	Parallax  	  --   hiệu ứng trượt nền, làm cho các phần tử trên slide di chuyển khi cuộn trang
+	Thumbs, 	  --   tạo và sử dụng các slide hình thu nhỏ để điều hướng giữa các slide chính
+	FreeMode	  --   cho phép chế độ trượt tự do, nghĩa là bạn có thể dừng ở bất kỳ vị trí nào thay vì chỉ ở các slide cố định.
+	Autoplay      --   tự động chuyển đổi giữa các slide sau một khoảng thời gian xác định
+	Pagination	  --   tạo các nút phân trang để người dùng có thể dễ dàng điều hướng qua các slide.
+	EffectFade	  --   hiệu ứng mờ dần giữa các slide khi chuyển đổi
+*/
 
 
 const homeData1 = [
@@ -54,7 +62,7 @@ export default function HomeMainSlider() {
 				//freeMode={true}
 				effect={"fade"}
 				slidesPerView= {"auto"}
-				loop={false}                
+				loop={false}
 				//watchSlidesProgress= {true}
 				pagination= {{
 					el: ".swiper-pagination-five",
