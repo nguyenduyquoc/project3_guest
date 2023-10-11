@@ -64,33 +64,33 @@ function Index(props){
 
 					<Route>
 						<Header />
-							<Main>
-								<Switch>
-									<Route path='/' exact component={Home} />									
-									<Route path='/about-us' exact component={AboutUs} />
-									<Route path='/my-profile' exact component={MyProfile} />
-									<Route path='/services' exact component={Services} />
-									<Route path='/faq' exact component={Faq} />
-									<Route path='/help-desk' exact component={HelpDesk} />
-									<Route path='/pricing' exact component={Pricing} />
-									<Route path='/privacy-policy' exact component={PrivacyPolicy} />
-									<Route path='/books-grid-view' exact component={BooksGridView} />
-									<Route path='/books-list' exact component={ShopList} />
-									<Route path='/books-grid-view-sidebar' exact component={BooksGridViewSidebar} />
-									<Route path='/books-list-view-sidebar' exact component={BooksListViewSidebar} />
-									<Route path='/shop-cart' exact component={ShopCart} />
-									<Route path='/wishlist' exact component={Wishlist} />
-									<Route path='/shop-login' exact component={Login} />
-									<Route path='/shop-registration' exact component={Registration} />
-									<Route path='/shop-checkout' exact component={ShopCheckout} />
-									<Route path='/books-detail' exact component={ShopDetail} />
-									<Route path='/blog-grid' exact component={BlogGrid} />
-									<Route path='/blog-large-sidebar' exact component={BlogLargeSidebar} />
-									<Route path='/blog-list-sidebar' exact component={BlogListSidebar} />
-									<Route path='/blog-detail' exact component={BlogDetail} />
-									<Route path='/contact-us' exact component={ContactUs} />
-								</Switch>
-							</Main>
+						<Main>
+							<Switch>
+								<Route path='/' exact component={Home} />
+								<Route path='/about-us' exact component={AboutUs} />
+								<Route path='/my-profile' exact component={MyProfile} />
+								<Route path='/services' exact component={Services} />
+								<Route path='/faq' exact component={Faq} />
+								<Route path='/help-desk' exact component={HelpDesk} />
+								<Route path='/pricing' exact component={Pricing} />
+								<Route path='/privacy-policy' exact component={PrivacyPolicy} />
+								<Route path='/books-grid-view' exact component={BooksGridView} />
+								<Route path='/books-list' exact component={ShopList} />
+								<Route path='/books-grid-view-sidebar' exact component={BooksGridViewSidebar} />
+								<Route path='/books-list-view-sidebar' exact component={BooksListViewSidebar} />
+								<Route path='/shop-cart' exact component={ShopCart} />
+								<Route path='/wishlist' exact component={Wishlist} />
+								<Route path='/shop-login' exact component={Login} />
+								<Route path='/shop-registration' exact component={Registration} />
+								<Route path='/shop-checkout' exact component={ShopCheckout} />
+								<Route path='/books-detail' exact component={ShopDetail} />
+								<Route path='/blog-grid' exact component={BlogGrid} />
+								<Route path='/blog-large-sidebar' exact component={BlogLargeSidebar} />
+								<Route path='/blog-list-sidebar' exact component={BlogListSidebar} />
+								<Route path='/blog-detail' exact component={BlogDetail} />
+								<Route path='/contact-us' exact component={ContactUs} />
+							</Switch>
+						</Main>
 						<Footer  footerChange="style-1" logoImage={logo}/>
 					</Route>
 				</Switch>

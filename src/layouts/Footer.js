@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 //import emailjs from '@emailjs/browser';
 import {Link} from 'react-router-dom';
 import Collapse from 'react-bootstrap/Collapse';
+import {useCategories} from "../context/CategoryContext";
 //images
 
 //import logo from './../assets/images/logo.png';
@@ -42,6 +43,8 @@ const accordList = [
 function Footer({footerChange, logoImage}){
 	//const [open, setOpen] = useState(false);
 	const [accordBtn, setAccordBtn] = useState();
+	const categories = useCategories();
+
 	return(
 		<>
 			<footer className={`site-footer ${footerChange}`}>				
@@ -50,13 +53,21 @@ function Footer({footerChange, logoImage}){
 						<div className="category-toggle">
 							<Link to={"#"} className={`toggle-btn ${accordBtn ? 'active' : ''}`}
 								onClick={() => setAccordBtn(!accordBtn)}
-							>Books categories</Link>
+							>All categories</Link>
 							<div className="toggle-items row">
 								<Collapse in={accordBtn} className="footer-col-book">
 									<ul>
-										{accordList.map((data, ind)=>(
-											<li key={ind}><Link to={"books-grid-view"}>{data.name}</Link></li>
-										))}
+										{categories.map((category, i)=> {
+											if (category.subCategories.length > 0) {
+												return (
+													<li key={i}>
+														<Link to="#">{category.name}</Link>
+													</li>
+												);
+											} else {
+												return null; // Không hiển thị nếu không có danh mục con
+											}
+										})}
 									</ul>
 								</Collapse>
 							</div>

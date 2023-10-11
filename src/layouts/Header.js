@@ -4,16 +4,19 @@ import {Dropdown} from 'react-bootstrap';
 //images
 
 import logo from './../assets/images/logo.png';
-import profile from './../assets/images/profile1.jpg';
+import profile from './../assets/images/profile-yellow.png';
 import pic1 from './../assets/images/books/small/pic1.jpg';
 import pic2 from './../assets/images/books/small/pic2.jpg';
 import pic3 from './../assets/images/books/small/pic3.jpg';
 
 import Collapse from 'react-bootstrap/Collapse';
 import {MenuListArray2} from './MenuListArray2';
+import {useCategories} from "../context/CategoryContext";
 
 function Header(){
 	const [selectBtn, setSelectBtn] = useState('Category');
+	const categories = useCategories();
+
 	/* for sticky header */
 	const [headerFix, setheaderFix] = React.useState(false);
 	useEffect(() => {
@@ -47,9 +50,24 @@ function Header(){
 		}
     }
 	// Menu dropdown list End
+
+	function renderCategoriesDropdownWithPrefix(categories, prefix = '') {
+		return (
+			<React.Fragment>
+				{categories.map((category) => (
+					<React.Fragment key={category.id}>
+						<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
+							{prefix} {category.name}
+						</Dropdown.Item>
+						{category.subCategories.length > 0 &&
+							renderCategoriesDropdownWithPrefix(category.subCategories, `${prefix}- `)}
+					</React.Fragment>
+				))}
+			</React.Fragment>
+		);
+	}
 		
 	return(
-		
 		<header className="site-header mo-left header style-1">	
 			<div className="header-info-bar">
 				<div className="container clearfix">
@@ -191,21 +209,19 @@ function Header(){
 									<Dropdown.Toggle  as="div" className="i-false">{selectBtn} 										
 									 	<i className="ms-4 font-10 fa-solid fa-chevron-down"></i>
 									</Dropdown.Toggle>
-									<Dropdown.Menu>
-										<Dropdown.Item onClick={()=>setSelectBtn('Category')}>Category</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Photography')}>Photography</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Arts')}>Arts</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Adventure')}>Adventure</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Action')}>Action</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Games')}>Games</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Movies')}>Movies</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Comics')}>Comics</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Biographies')}>Biographies</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Children’s Books')}>Children’s Books</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Historical')}>Historical</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Contemporary')}>Contemporary</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Classics')}>Classics</Dropdown.Item>
-										<Dropdown.Item onClick={()=>setSelectBtn('Education')}>Education</Dropdown.Item>
+									<Dropdown.Menu style={{ maxHeight: "50vh", overflowY: "auto" }}>
+										<Dropdown.Item onClick={() => setSelectBtn("All")}>
+											All
+										</Dropdown.Item>
+										{categories.map((category) => (
+											<React.Fragment key={category.id}>
+												<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
+													{category.name}
+												</Dropdown.Item>
+												{category.subCategories.length > 0 &&
+													renderCategoriesDropdownWithPrefix(category.subCategories, "-")}
+											</React.Fragment>
+										))}
 									</Dropdown.Menu>
 								</Dropdown>
 								<input type="text" className="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here" />
