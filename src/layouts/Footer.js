@@ -45,6 +45,19 @@ function Footer({footerChange, logoImage}){
 	const [accordBtn, setAccordBtn] = useState();
 	const categories = useCategories();
 
+	function renderCategoriesList(categories) {
+		return (
+			<>
+				{categories.map((category) => (
+					<React.Fragment key={category.id}>
+						<li><Link>{category.name}</Link></li>
+						{category.inverseParent.length > 0 &&
+							renderCategoriesList(category.inverseParent)}
+					</React.Fragment>
+				))}
+			</>
+		);
+	}
 	return(
 		<>
 			<footer className={`site-footer ${footerChange}`}>				
@@ -57,17 +70,13 @@ function Footer({footerChange, logoImage}){
 							<div className="toggle-items row">
 								<Collapse in={accordBtn} className="footer-col-book">
 									<ul>
-										{categories.map((category, i)=> {
-											if (category.subCategories.length > 0) {
-												return (
-													<li key={i}>
-														<Link to="#">{category.name}</Link>
-													</li>
-												);
-											} else {
-												return null; // Không hiển thị nếu không có danh mục con
-											}
-										})}
+										{categories.map((category, id)=>(
+											<React.Fragment key={id}>
+												<li className="w-100 fw-bold border-bottom"><Link>{category.name}</Link></li>
+												{category.inverseParent.length > 0 &&
+													renderCategoriesList(category.inverseParent)}
+											</React.Fragment>
+										))}
 									</ul>
 								</Collapse>
 							</div>

@@ -59,8 +59,8 @@ function Header(){
 						<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
 							{prefix} {category.name}
 						</Dropdown.Item>
-						{category.subCategories.length > 0 &&
-							renderCategoriesDropdownWithPrefix(category.subCategories, `${prefix}- `)}
+						{category.inverseParent.length > 0 &&
+							renderCategoriesDropdownWithPrefix(category.inverseParent, `${prefix}- `)}
 					</React.Fragment>
 				))}
 			</React.Fragment>
@@ -218,8 +218,8 @@ function Header(){
 												<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
 													{category.name}
 												</Dropdown.Item>
-												{category.subCategories.length > 0 &&
-													renderCategoriesDropdownWithPrefix(category.subCategories, "-")}
+												{category.inverseParent.length > 0 &&
+													renderCategoriesDropdownWithPrefix(category.inverseParent, "-")}
 											</React.Fragment>
 										))}
 									</Dropdown.Menu>
