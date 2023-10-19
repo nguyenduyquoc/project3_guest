@@ -211,7 +211,6 @@ function Header(){
 									</Dropdown.Toggle>
 									<Dropdown.Menu style={{ maxHeight: "50vh", overflowY: "auto" }}>
 										<Dropdown.Item onClick={() => setSelectBtn("All")}>
-											All
 										</Dropdown.Item>
 										{categories.map((category) => (
 											<React.Fragment key={category.id}>
