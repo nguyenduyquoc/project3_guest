@@ -6,7 +6,6 @@ const api = axios.create({
 })
 
 // Add an interceptor to set the authorization header
-/*
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token'); // Assuming you store the token in local storage
     if (token) {
@@ -16,6 +15,5 @@ api.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error);
 });
-*/
 
 export default api;
