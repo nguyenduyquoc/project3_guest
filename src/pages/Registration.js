@@ -7,9 +7,11 @@ import {useAuth} from "../context/AuthContext";
 import {toast} from "react-toastify";
 import SimpleReactValidator from "simple-react-validator";
 import {registerUser} from "../services/auth.service";
+import {useLoading} from "../context/LoadingContext";
 
 function Registration(){
     const {authState, authDispatch} = useAuth();
+    const {loadingDispatch} = useLoading();
 
     const [formData, setFormData] = useState({
         fname: '',
@@ -34,6 +36,7 @@ function Registration(){
         e.preventDefault();
         if (validator.allValid()) {
             try {
+                loadingDispatch({type: 'START_LOADING'});
                 const userData = {
                     fname: formData.fname,
                     lname: formData.lname,
@@ -49,7 +52,7 @@ function Registration(){
             } catch (error) {
                 toast.error('An error occurred. Please try again!');
             } finally {
-
+                loadingDispatch({type: 'STOP_LOADING'});
             }
         } else {
             validator.showMessages();

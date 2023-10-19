@@ -1,15 +1,18 @@
 import React,{useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
+import SimpleReactValidator from "simple-react-validator";
 
 //Components 
 import PageTitle from './../layouts/PageTitle';
 import {useAuth} from "../context/AuthContext";
-import SimpleReactValidator from "simple-react-validator";
 import {loginUser} from "../services/auth.service";
 import {toast} from "react-toastify";
+import {useLoading} from "../context/LoadingContext";
 
 function Login(){
     const [forgotPass, setForgotPass] = useState();
+
+    const { loadingDispatch} = useLoading();
 
     const {authState, authDispatch} = useAuth();
 
@@ -30,6 +33,7 @@ function Login(){
         e.preventDefault();
         if (validator.allValid()) {
             try {
+                loadingDispatch({type: 'START_LOADING'});
                 const loginData = await loginUser(formData);
                 authDispatch({ type: 'SET_TOKEN', payload: loginData.token });
                 authDispatch({ type: 'SET_USER', payload: loginData.user });
@@ -39,7 +43,7 @@ function Login(){
             } catch (error) {
                 toast.error('Wrong email or password!');
             } finally {
-                /*loadingDispatch({type: 'STOP_LOADING'});*/
+                loadingDispatch({type: 'STOP_LOADING'});
             }
         } else {
             validator.showMessages();
@@ -94,7 +98,7 @@ function Login(){
                                             </div>
                                             <div className="text-left">
                                                 <button type="submit" className="btn btn-primary btnhover me-2">login</button>
-                                                <Link tp={"#"}  className="m-l5"
+                                                <Link to={"#"}  className="m-l5"
                                                     onClick={()=>setForgotPass(!forgotPass)}
                                                 >
                                                     <i className="fas fa-unlock-alt"></i> Forgot Password

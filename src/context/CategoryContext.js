@@ -1,12 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {getCategories} from "../services/category.service";
 
-
 const CategoryContext = createContext();
-
-export function useCategories() {
-    return useContext(CategoryContext);
-}
 
 export function CategoryProvider({ children }) {
     const [categories, setCategories] = useState([]);
@@ -30,4 +25,8 @@ export function CategoryProvider({ children }) {
             {children}
         </CategoryContext.Provider>
     );
+}
+
+export function useCategories() {
+    return useContext(CategoryContext);
 }
