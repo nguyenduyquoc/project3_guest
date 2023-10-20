@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {Accordion} from 'react-bootstrap';
 
 import SlideDragable from './SlideDragable';
+import {useCategories} from "../context/CategoryContext";
 
 const selectYear = [
     { year: 2022, year2: 2011},
@@ -47,6 +48,21 @@ const accordionBlog2 = [
 ];
 
 const ShopSidebar = () =>{
+    const categories = useCategories();
+
+    const renderCategoryCheckboxes = (categories, level = 0) => {
+        return categories.map((item) => (
+            <React.Fragment key={item.id}>
+                <div className={`form-check search-content${level > 0 ? ' m-l20' : ''}`} >
+                    <input className="form-check-input" type="checkbox" value="" id={`shopcategoryCheckBox-${item.id}`} />
+                    <label className="form-check-label" htmlFor={`shopcategoryCheckBox-${item.id}`}>
+                        {item.name}
+                    </label>
+                </div>
+                {item.inverseParent && item.inverseParent.length > 0 && renderCategoryCheckboxes(item.inverseParent, level + 1)}
+            </React.Fragment>
+        ));
+    };
     return(
         <>
             <div className="shop-filter">
@@ -74,24 +90,7 @@ const ShopSidebar = () =>{
                         <Accordion.Body >
                             <div className="widget dz-widget_services d-flex justify-content-between">
                                 <div className="">
-                                    {categoryBlog1.map((item,ind)=>(
-                                        <div className="form-check search-content" key={ind}>
-                                            <input className="form-check-input" type="checkbox" value="" id={`shopcategoryCheckBox-${ind+11}`} />
-                                            <label className="form-check-label" htmlFor={`shopcategoryCheckBox-${ind+11}`}>
-                                                {item.name}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="">
-                                    {categoryBlog1.map((item,ind)=>(
-                                        <div className="form-check search-content" key={ind}>
-                                            <input className="form-check-input" type="checkbox" value="" id={`shopcategoryCheckBox-${ind+28}`} />
-                                            <label className="form-check-label" htmlFor={`shopcategoryCheckBox-${ind+28}`}>
-                                                {item.name2}
-                                            </label>
-                                        </div>
-                                    ))}                                    
+                                    {renderCategoryCheckboxes(categories)}
                                 </div>
                             </div>    
                         </Accordion.Body>
@@ -141,7 +140,7 @@ const ShopSidebar = () =>{
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>                                     
-                <Accordion className="accordion-filter accordion-inner" defaultActiveKey="0">
+                {/*<Accordion className="accordion-filter accordion-inner" defaultActiveKey="0">
                     {accordionBlog2.map((data, index)=>(
                         <Accordion.Item eventKey={`${index}`}>
                             <Accordion.Header>{data.title}</Accordion.Header>
@@ -156,7 +155,7 @@ const ShopSidebar = () =>{
                             </Accordion.Body>
                         </Accordion.Item>
                     ))}
-                </Accordion>
+                </Accordion>*/}
 
                 <div className="row filter-buttons">
                     <div>

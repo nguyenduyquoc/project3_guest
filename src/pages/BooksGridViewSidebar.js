@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse, Dropdown} from 'react-bootstrap';
 
@@ -10,18 +10,12 @@ import NewsLetter from '../components/NewsLetter';
 import CounterSection from '../elements/CounterSection';
 import ShopSidebar from '../elements/ShopSidebar';
 
-//Images
-import book16 from './../assets/images/books/grid/book16.jpg';
-import book8 from './../assets/images/books/grid/book8.jpg';
-import book14 from './../assets/images/books/grid/book14.jpg';
-import book15 from './../assets/images/books/grid/book15.jpg';
-import book4 from './../assets/images/books/grid/book4.jpg';
-import book9 from './../assets/images/books/grid/book9.jpg';
-import book2 from './../assets/images/books/grid/book2.jpg';
-import book7 from './../assets/images/books/grid/book7.jpg';
-import book13 from './../assets/images/books/grid/book13.jpg';
-import book10 from './../assets/images/books/grid/book10.jpg';
-import book11 from './../assets/images/books/grid/book11.jpg';
+
+import {useLoading} from "../context/LoadingContext";
+import {getProducts} from "../services/product.service";
+import {addAutoWidthTransformation} from "../utils/cloudinaryUtils";
+import {formatCurrency} from "../utils/currencyFormatter";
+import Pagination from "../layouts/Pagination";
 
 const lableBlogData = [
     {name:'Architecture'},
@@ -51,26 +45,52 @@ const lableBlogData = [
     {name:'Mathematics'}
 ];
 
-const cardDetials = [
-    {image:book16, title:'Thunder Stunt', subtitle1:'ADVANTURE',subtitle2:'SCIENCE', price1:'54.78', price2:'70.00' },
-    {image:book14, title:'A Heavy Lift', subtitle1:'RACING',subtitle2:'DRAMA', price1:'25.18', price2:'68.00' },
-    {image:book15, title:'Terrible Madness', subtitle1:'SPORTS',subtitle2:'GAME', price1:'25.30', price2:'38.00' },
-    {image:book4, title:'Such Fun Age', subtitle1:'ADVANTURE', price1:'20.15', price2:'33.00' },
-    {image:book9, title:'Pushing Clouds', subtitle1:'ADVANTURE', price1:'30.12', price2:'40.00' },
-    {image:book2, title:'Homie', subtitle1:'HORROR',subtitle2:'DRAMA', price1:'15.25', price2:'45.00' },
-    {image:book7, title:'SECONDS', subtitle1:'SPORTS',subtitle2:'GAME', price1:'21.78', price2:'36.00' },
-    {image:book13, title:'REWORK', subtitle1:'THRILLER', price1:'23.20', price2:'49.00' },
-    {image:book11, title:'ALL GOOD NEWS', subtitle1:'DRAMA',subtitle2:'COMEDY', price1:'40.78', price2:'68.00' },
-    {image:book10, title:'Emily The Back', subtitle1:'DRAMA',subtitle2:'SIRIAL', price1:'54.78', price2:'63.00' },
-    {image:book8, title:'The Adventure', subtitle1:'BIOGRAPHY', price1:'37.00', price2:'47.00' },
-    {image:book14, title:'A Heavy Lift', subtitle1:'STORY',subtitle2:'BIOGRAPHY', price1:'22.00', price2:'51.00' },
-];
-
-
 
 function BooksGridViewSidebar(){
     const [accordBtn, setAccordBtn] = useState();
     const [selectBtn, setSelectBtn] = useState('Newest');
+
+    const {loadingDispatch} = useLoading();
+    const [products, setProducts] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const [filterCriteria, setFilterCriteria] = useState({
+            page: 1,
+            pageSize: 12,
+            minPrice: null,
+            maxPrice: null,
+            categoryIds: [],
+            authorIds: [],
+            publisherIds: [],
+            publishYears: [],
+            sortBy: null,
+            searchQuery: null,
+            status: 1
+        }
+    );
+
+    useEffect(() => {
+        fetchProducts();
+    }, [filterCriteria])
+
+    const fetchProducts = async () => {
+        try {
+            loadingDispatch({type: 'START_LOADING'});
+            const response = await getProducts(filterCriteria);
+            console.log(response);
+            setProducts(response.products);
+            setTotalPages(response.totalPages);
+            setTotalItems(response.totalItems);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            loadingDispatch({type: 'STOP_LOADING'});
+        }
+    }
+
+    const handlePageChange = (pageNumber) => {
+        setFilterCriteria({...filterCriteria, page: pageNumber});
+    };
     return(
         <>
             <div className="page-content bg-grey">
@@ -158,23 +178,29 @@ function BooksGridViewSidebar(){
                                     </div>
                                 </Collapse>
                                 <div className="row book-grid-row">
-                                    {cardDetials.map((data, i)=>(
-                                        <div className="col-book style-2" key={i}>
+                                    {products.map((product, i)=>(
+                                        <div className="col-book style-2" key={product.id}>
                                             <div className="dz-shop-card style-1">
                                                 <div className="dz-media">
-                                                    <img src={data.image} alt="book" />									
+                                                    <img src={addAutoWidthTransformation(product.thumbnail)} alt="book" />
                                                 </div>
                                                 <div className="bookmark-btn style-2">
-                                                    <input className="form-check-input" type="checkbox" id={`flexCheckDefault${i+21}`} />
-                                                    <label className="form-check-label" htmlFor={`flexCheckDefault${i+21}`}>
+                                                    <input className="form-check-input" type="checkbox" id={`flexCheckDefault${product.id}`} />
+                                                    <label className="form-check-label" htmlFor={`flexCheckDefault${product.id}`}>
                                                         <i className="flaticon-heart"></i>
                                                     </label>
                                                 </div> 
                                                 <div className="dz-content">
-                                                    <h5 className="title"><Link to={"books-grid-view"}>{data.title}</Link></h5>
-                                                    <ul className="dz-tags">
-                                                        <li><Link to={"books-grid-view"}>{data.subtitle1},</Link></li>
-                                                        <li><Link to={"books-grid-view"}>{data.subtitle2}</Link></li>
+                                                    <h5 className="title"><Link to={`shop-detail/${product.slug}`}>{product.name}</Link></h5>
+                                                    <ul className="dz-tags text-uppercase" style={{overflowX: "hidden", whiteSpace: "nowrap", display: "block" }}>
+                                                        {product.categories.map((category, index) =>
+                                                            <li
+                                                                key={category.id}
+                                                                className="d-inline-block"
+                                                            >
+                                                                <Link>{category.name}{index < product.categories.length - 1 && ","}</Link>
+                                                            </li>
+                                                        )}
                                                     </ul>
                                                     <ul className="dz-rating">
                                                         <li><i className="flaticon-star text-yellow"></i></li>	
@@ -184,10 +210,16 @@ function BooksGridViewSidebar(){
                                                         <li><i className="flaticon-star text-yellow"></i></li>		
                                                     </ul>
                                                     <div className="book-footer">
-                                                        <div className="price">
-                                                            <span className="price-num">${data.price1}</span>
-                                                            <del>${data.price2}</del>
-                                                        </div>
+                                                        {product.discountAmount ?
+                                                            <div className="price">
+                                                                <span className="price-num">{formatCurrency(product.price - product.discountAmount)}</span>
+                                                                <del>{formatCurrency(product.price)}</del>
+                                                            </div>
+                                                            :
+                                                            <div className="price">
+                                                                <span className="price-num">{formatCurrency(product.price)}</span>
+                                                            </div>
+                                                        }
                                                         <Link to={"shop-cart"} className="btn btn-secondary box-btn btnhover btnhover2"><i className="flaticon-shopping-cart-1 m-r10"></i> Add to cart</Link>
                                                     </div>
                                                 </div>
@@ -198,18 +230,10 @@ function BooksGridViewSidebar(){
                                 </div>
                                 <div className="row page mt-0">
                                     <div className="col-md-6">
-                                        <p className="page-text">Showing 12 from 50 data</p>
+                                        <p className="page-text">Showing 12 from {totalItems} data</p>
                                     </div>
                                     <div className="col-md-6">
-                                        <nav aria-label="Blog Pagination">
-                                            <ul className="pagination style-1 p-t20">
-                                                <li className="page-item"><Link to={"#"} className="page-link prev" >Prev</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link active" >1</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link">2</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link">3</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link next" >Next</Link></li>
-                                            </ul>
-                                        </nav>
+                                        <Pagination currentPage={filterCriteria.page} totalPages={totalPages} onPageChange={handlePageChange} />
                                     </div>
                                 </div>
 					        </div>

@@ -1,23 +1,7 @@
 export const MenuListArray2 = [
     {
-        title: 'Home',	
-        classsChange: 'sub-menu-down',		
-        content: [
-            {
-                title: 'Home-1',
-                to: './',					
-            },
-            {
-                title: 'Home-2',
-                to: './index-2',
-                
-            },            
-            
-        ],
-    },
-    {   
-        title: 'About Us',	
-        to: './about-us',
+        title: 'Home',
+        to: './',
     },
     {
         title: 'Pages',
@@ -84,7 +68,7 @@ export const MenuListArray2 = [
             },
             {
                 title: 'Shop Detail',
-                to: './books-detail',
+                to: './shop-detail',
             },
             {
                 title: 'Cart',
@@ -130,6 +114,10 @@ export const MenuListArray2 = [
             },
             
         ],
+    },
+    {
+        title: 'About Us',
+        to: './about-us',
     },
     {
         title: 'Contact Us',	
