@@ -6,7 +6,7 @@ class SlideDragable extends React.Component {
    render() {
       return (
          <div className="slider" id="SlideDragable">
-            <Nouislider
+            {/*<Nouislider
                connect
                tooltips={true}
                start={[40, 80]}
@@ -25,7 +25,17 @@ class SlideDragable extends React.Component {
                   "90%": 90,
                   max: [100],
                }}
-            />
+            />*/}
+             <Nouislider
+                 connect
+                 tooltips={true}
+                 start={[0, 200]}
+                 behaviour="tap"
+                 range={{
+                     min: 0,
+                     max: 200
+                 }}
+             />
          </div>
       );
    }

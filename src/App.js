@@ -11,6 +11,8 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {LoadingProvider} from "./context/LoadingContext";
 import Loading from "./layouts/Loading";
+import {ProvinceProvider} from "./context/ProvinceContext";
+import {CouponProvider} from "./context/CouponContext";
 
 function App() {
 	return (
@@ -18,11 +20,15 @@ function App() {
 			<UserProvider>
 				<LoadingProvider>
 					<CategoryProvider>
-						<Loading />
-						<div className="App">
-							<Index />
-							<ToastContainer />
-						</div>
+						<ProvinceProvider>
+							<CouponProvider>
+								<Loading />
+								<div className="App">
+									<Index />
+									<ToastContainer />
+								</div>
+							</CouponProvider>
+						</ProvinceProvider>
 					</CategoryProvider>
 				</LoadingProvider>
 			</UserProvider>

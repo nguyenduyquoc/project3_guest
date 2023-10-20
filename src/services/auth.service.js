@@ -1,7 +1,7 @@
 import api from './api';
 
 export const registerUser = async (userData) => {
-    const endpoint = 'Auth/register';
+    const endpoint = `Auth/register`;
     try {
         const response = await api.post(endpoint, userData);
         return response.data;
@@ -12,7 +12,7 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (loginData) => {
-    const endpoint = 'Auth/login';
+    const endpoint = `Auth/login`;
     try {
         const response = await api.post(endpoint, loginData);
         return response.data;
@@ -23,7 +23,7 @@ export const loginUser = async (loginData) => {
 };
 
 export const getProfile = async () => {
-    const endpoint = 'Auth/profile'
+    const endpoint = `Auth/profile`;
     try {
         const response = await api.get(endpoint);
         return response.data;
