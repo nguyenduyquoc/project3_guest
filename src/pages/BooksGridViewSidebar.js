@@ -10,7 +10,18 @@ import NewsLetter from '../components/NewsLetter';
 import CounterSection from '../elements/CounterSection';
 import ShopSidebar from '../elements/ShopSidebar';
 
-
+//Images
+import book16 from './../assets/images/books/grid/book16.jpg';
+import book8 from './../assets/images/books/grid/book8.jpg';
+import book14 from './../assets/images/books/grid/book14.jpg';
+import book15 from './../assets/images/books/grid/book15.jpg';
+import book4 from './../assets/images/books/grid/book4.jpg';
+import book9 from './../assets/images/books/grid/book9.jpg';
+import book2 from './../assets/images/books/grid/book2.jpg';
+import book7 from './../assets/images/books/grid/book7.jpg';
+import book13 from './../assets/images/books/grid/book13.jpg';
+import book10 from './../assets/images/books/grid/book10.jpg';
+import book11 from './../assets/images/books/grid/book11.jpg';
 import {useLoading} from "../context/LoadingContext";
 import {getProducts} from "../services/product.service";
 import {addAutoWidthTransformation} from "../utils/cloudinaryUtils";
@@ -44,6 +55,22 @@ const lableBlogData = [
     {name:'Literary Collections'},
     {name:'Mathematics'}
 ];
+
+const cardDetials = [
+    {image:book16, title:'Thunder Stunt', subtitle1:'ADVANTURE',subtitle2:'SCIENCE', price1:'54.78', price2:'70.00' },
+    {image:book14, title:'A Heavy Lift', subtitle1:'RACING',subtitle2:'DRAMA', price1:'25.18', price2:'68.00' },
+    {image:book15, title:'Terrible Madness', subtitle1:'SPORTS',subtitle2:'GAME', price1:'25.30', price2:'38.00' },
+    {image:book4, title:'Such Fun Age', subtitle1:'ADVANTURE', price1:'20.15', price2:'33.00' },
+    {image:book9, title:'Pushing Clouds', subtitle1:'ADVANTURE', price1:'30.12', price2:'40.00' },
+    {image:book2, title:'Homie', subtitle1:'HORROR',subtitle2:'DRAMA', price1:'15.25', price2:'45.00' },
+    {image:book7, title:'SECONDS', subtitle1:'SPORTS',subtitle2:'GAME', price1:'21.78', price2:'36.00' },
+    {image:book13, title:'REWORK', subtitle1:'THRILLER', price1:'23.20', price2:'49.00' },
+    {image:book11, title:'ALL GOOD NEWS', subtitle1:'DRAMA',subtitle2:'COMEDY', price1:'40.78', price2:'68.00' },
+    {image:book10, title:'Emily The Back', subtitle1:'DRAMA',subtitle2:'SIRIAL', price1:'54.78', price2:'63.00' },
+    {image:book8, title:'The Adventure', subtitle1:'BIOGRAPHY', price1:'37.00', price2:'47.00' },
+    {image:book14, title:'A Heavy Lift', subtitle1:'STORY',subtitle2:'BIOGRAPHY', price1:'22.00', price2:'51.00' },
+];
+
 
 
 function BooksGridViewSidebar(){
@@ -179,7 +206,7 @@ function BooksGridViewSidebar(){
                                 </Collapse>
                                 <div className="row book-grid-row">
                                     {products.map((product, i)=>(
-                                        <div className="col-book style-2" key={product.id}>
+                                        <div className="col-book style-2" key={i}>
                                             <div className="dz-shop-card style-1">
                                                 <div className="dz-media">
                                                     <img src={addAutoWidthTransformation(product.thumbnail)} alt="book" />
@@ -233,6 +260,15 @@ function BooksGridViewSidebar(){
                                         <p className="page-text">Showing 12 from {totalItems} data</p>
                                     </div>
                                     <div className="col-md-6">
+                                        <nav aria-label="Blog Pagination">
+                                            <ul className="pagination style-1 p-t20">
+                                                <li className="page-item"><Link to={"#"} className="page-link prev" >Prev</Link></li>
+                                                <li className="page-item"><Link to={"#"} className="page-link active" >1</Link></li>
+                                                <li className="page-item"><Link to={"#"} className="page-link">2</Link></li>
+                                                <li className="page-item"><Link to={"#"} className="page-link">3</Link></li>
+                                                <li className="page-item"><Link to={"#"} className="page-link next" >Next</Link></li>
+                                            </ul>
+                                        </nav>
                                         <Pagination currentPage={filterCriteria.page} totalPages={totalPages} onPageChange={handlePageChange} />
                                     </div>
                                 </div>

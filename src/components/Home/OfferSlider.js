@@ -89,15 +89,15 @@ function OfferSlider() {
                     <SwiperSlide key={ind}>                       
                         <div className="dz-card style-2">
                             <div className="dz-media">
-                                <Link to={"books-detail"}><img src={item.image} alt="/" /></Link>
+                                <Link to={"shop-detail"}><img src={item.image} alt="/" /></Link>
                             </div>
                             <div className="dz-info">
-                                <h4 className="dz-title"><Link to={"books-detail"}>{item.title}</Link></h4>
+                                <h4 className="dz-title"><Link to={"shop-detail"}>{item.title}</Link></h4>
                                 <div className="dz-meta">
                                     <ul className="dz-tags">
-                                        <li><Link to={"books-detail"} className="me-1">BIOGRAPHY</Link></li>
-                                        <li><Link to={"books-detail"} className="me-1">THRILLER</Link></li>
-                                        <li><Link to={"books-detail"} >HORROR</Link></li>
+                                        <li><Link to={"shop-detail"} className="me-1">BIOGRAPHY</Link></li>
+                                        <li><Link to={"shop-detail"} className="me-1">THRILLER</Link></li>
+                                        <li><Link to={"shop-detail"} >HORROR</Link></li>
                                     </ul>
                                 </div>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>

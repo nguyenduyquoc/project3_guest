@@ -23025,7 +23025,7 @@ pre {
       padding: 0;
       background: none; }
       .filter-area .category .form-group .dropdown {
-        width: 110px !important; }
+        width: auto; }
       .filter-area .category .form-group .btn, .filter-area .category .form-group .wp-block-button__link, .filter-area .category .form-group .woocommerce .widget_shopping_cart .buttons a, .woocommerce .widget_shopping_cart .buttons .filter-area .category .form-group a,
       .filter-area .category .form-group .woocommerce.widget_shopping_cart .buttons a, .woocommerce.widget_shopping_cart .buttons .filter-area .category .form-group a, .filter-area .category .form-group .woocommerce #review_form #respond .form-submit input, .woocommerce #review_form #respond .form-submit .filter-area .category .form-group input, .filter-area .category .form-group .woocommerce-cart-form .table tr .button, .woocommerce-cart-form .table tr .filter-area .category .form-group .button, .filter-area .category .form-group .woocommerce-cart .wc-proceed-to-checkout a.checkout-button, .woocommerce-cart .wc-proceed-to-checkout .filter-area .category .form-group a.checkout-button, .filter-area .category .form-group .woocommerce #respond input#submit, .woocommerce #respond .filter-area .category .form-group input#submit,
       .filter-area .category .form-group .woocommerce a.button, .woocommerce .filter-area .category .form-group a.button,
@@ -23525,7 +23525,7 @@ pre {
   .shop-filter {
     padding: 30px 20px;
     position: fixed;
-    left: -345px;
+    left: 0px;
     top: 0px;
     z-index: 999999999;
     background: #ffffff;
@@ -24843,3 +24843,15 @@ body.woo-variation-swatches .variable-items-wrapper .variable-item:not(.radio-va
   padding: 4px 2px; }
 
 /*# sourceMappingURL=style.css.map */
+.icon-container {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0px 1px 40px 0px rgba(40, 63, 116, 0.1);
+  z-index: 1000;
+}

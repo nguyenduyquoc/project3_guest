@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
 import { Nav, Tab } from 'react-bootstrap';
 //import {Collapse, Dropdown} from 'react-bootstrap';
 
@@ -17,6 +17,11 @@ import profile1 from './../assets/images/profile1.jpg';
 import book15 from './../assets/images/books/grid/book15.jpg';
 import book3 from './../assets/images/books/grid/book3.jpg';
 import book5 from './../assets/images/books/grid/book5.jpg';
+import {useLoading} from "../context/LoadingContext";
+import {getProductDetail} from "../services/product.service";
+import {getAuthor} from "../services/author.servive";
+import {formatCurrency} from "../utils/currencyFormatter";
+import formatDate from "../utils/datetimeFormatter";
 
 const tableDetail = [
     {tablehead:'Book Title', tabledata:'Think and Grow Rich'},
@@ -37,30 +42,45 @@ const relatedBook = [
     {image:book5,  title:'Terrible Madness' },
 ];
 
-function CommentBlog({title, image}){
+function CommentBlog({reviewInfor}){
     return(
         <>
-            <div className="comment-body" id="div-comment-3">
+            {/*<div className="comment-body" id="div-comment-3">
                 <div className="comment-author vcard">
                     <img src={image} alt="" className="avatar"/>
                     <cite className="fn">{title}</cite> <span className="says">says:</span>
                     <div className="comment-meta">
-                        <Link to={"#"}>December 28, 2022 at 6:14 am</Link>
+                        <p>{formatDate(reviewInfor.createdAt)}</p>
                     </div>
                 </div>
                 <div className="comment-content dlab-page-text">
-                    <p>Donec suscipit porta lorem eget condimentum. Morbi vitae mauris in leo venenatis varius. Aliquam nunc enim, egestas ac dui in, aliquam vulputate erat.</p>
+                    <p>{reviewInfor.comment}.</p>
                 </div>
                 <div className="reply">
                     <Link to={"#"} className="comment-reply-link"><i className="fa fa-reply"></i> Reply</Link>
                 </div>
-            </div>
+            </div>*/}
         </>
     )
 }
 
 function ShopDetail(){
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(1);
+
+    const {slug} = useParams();
+    const [product, setProduct] = useState({});
+    const {loadingDispatch} = useLoading();
+    const find = async () => {
+        loadingDispatch({type : "START_LOADING"});
+        const product = await getProductDetail(slug);
+        setProduct(product);
+        loadingDispatch({type : "STOP_LOADING"});
+    }
+
+
+    useEffect(() => {
+        find();
+    }, []);
     
     return(
         <>
@@ -71,11 +91,11 @@ function ShopDetail(){
                             <div className="col">
                                 <div className="dz-box">
                                     <div className="dz-media">
-                                        <img src={book16} alt="book" />
+                                        <img src={product.thumbnail} alt="book" />
                                     </div>
                                     <div className="dz-content">
                                         <div className="dz-header">
-                                            <h3 className="title">Think and Grow Rich</h3>
+                                            <h3 className="title">{product.name}</h3>
                                             <div className="shop-item-rating">
                                                 <div className="d-lg-flex d-sm-inline-flex d-flex align-items-center">
                                                     <ul className="dz-rating">
@@ -85,7 +105,7 @@ function ShopDetail(){
                                                         <li><i className="flaticon-star text-yellow"></i></li>		
                                                         <li><i className="flaticon-star text-muted"></i></li>		
                                                     </ul>
-                                                    <h6 className="m-b0">4.0</h6>
+                                                    <h6 className="m-b0">{product.rating}</h6>
                                                 </div>
                                                 <div className="social-area">
                                                     <ul className="dz-social-icon style-3">
@@ -102,22 +122,30 @@ function ShopDetail(){
                                                 <ul className="book-info">
                                                     <li>
                                                         <div className="writer-info">
-                                                            <img src={profile2} alt="book" />
+                                                            <img src={product.authorAvatar} alt="book" />
                                                             <div>
-                                                                <span>Writen by</span>Kevin Smiley
+                                                                <span>Writen by</span>{product.authorName}
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li><span>Publisher</span>Printarea Studios</li>
-                                                    <li><span>Year</span>2019</li>
+                                                    <li><span>Publisher</span>{product.publisherName}</li>
+                                                    <li><span>Year</span>{product.publishYear}</li>
                                                 </ul>
                                             </div>
-                                            <p className="text-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</p>
-                                            <p className="text-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem</p>
+                                            <p className="text-1">{product.description}.</p>
+                                            <p className="text-2">{product.description}.</p>
                                             <div className="book-footer">
                                                 <div className="price">
-                                                    <h5>$54.78</h5>
-                                                    <p className="p-lr10">$70.00</p>
+                                                    {product.discountAmount ?
+                                                        <div className="price">
+                                                            <span className="price-num">{formatCurrency(product.price - product.discountAmount)}</span>
+                                                            <del>{formatCurrency(product.price)}</del>
+                                                        </div>
+                                                        :
+                                                        <div className="price">
+                                                            <span className="price-num">{formatCurrency(product.price)}</span>
+                                                        </div>
+                                                    }
                                                 </div>
                                                 <div className="product-num">
                                                     <div className="quantity btn-quantity style-1 me-3">
@@ -160,21 +188,17 @@ function ShopDetail(){
                                             <Tab.Pane eventKey="details">
                                                 <table className="table border book-overview">
                                                     <tbody>
-                                                        {tableDetail.map((data, index)=>(
-                                                            <tr key={index}>
-                                                                <th>{data.tablehead}</th>
-                                                                <td>{data.tabledata}</td>
-                                                            </tr>
-                                                        ))}
+                                                    <div>
+                                                        <div dangerouslySetInnerHTML={{ __html: product.detail }} />
+                                                    </div>
                                                         <tr className="tags">
                                                             <th>Tags</th>
                                                             <td>
-                                                                <Link to={"#"} className="badge me-1">Drama</Link>
-                                                                <Link to={"#"} className="badge me-1">Advanture</Link>
-                                                                <Link to={"#"} className="badge me-1">Survival</Link>
-                                                                <Link to={"#"} className="badge me-1">Biography</Link>
-                                                                <Link to={"#"} className="badge me-1">Trending2022</Link>
-                                                                <Link to={"#"} className="badge">Bestseller</Link>
+                                                                {product.tags && Array.isArray(product.tags) && product.tags.map((tag, i) => (
+                                                                    <Link key={i} to={"#"} className="badge me-1">
+                                                                        {tag.name}
+                                                                    </Link>
+                                                                ))}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -183,24 +207,15 @@ function ShopDetail(){
                                             <Tab.Pane eventKey="review">
                                                 <div className="clear" id="comment-list">
                                                     <div className="post-comments comments-area style-1 clearfix">
-                                                        <h4 className="comments-title">4 COMMENTS</h4>
+                                                        <h4 className="comments-title">COMMENTS</h4>
                                                         <div id="comment">
-                                                            <ol className="comment-list">
-                                                                <li className="comment even thread-even depth-1 comment" id="comment-2">
-                                                                    <CommentBlog  title="Michel Poe"  image={profile4} /> 
-                                                                    <ol className="children">
-                                                                        <li className="comment byuser comment-author-w3itexpertsuser bypostauthor odd alt depth-2 comment" id="comment-3">
-                                                                            <CommentBlog  title="Celesto Anderson"  image={profile3} /> 
-                                                                        </li>
-                                                                    </ol>
-                                                                </li>
-                                                                <li className="comment even thread-odd thread-alt depth-1 comment" id="comment-4">
-                                                                    <CommentBlog  title="Ryan"  image={profile2} />
-                                                                </li>
-                                                                <li className="comment odd alt thread-even depth-1 comment" id="comment-5">
-                                                                    <CommentBlog  title="Stuart"  image={profile1} />
-                                                                </li>
-                                                            </ol>
+                                                            {/*<ol className="comment-list">
+                                                                {product.reviews && Array.isArray(product.reviews) && product.reviews.map((review, i) => (
+                                                                    <li key={i} className="comment odd alt thread-even depth-1 comment" id={`comment-${i}`}>
+                                                                        <CommentBlog  reviewInfor = {review} />
+                                                                    </li>
+                                                                ))}
+                                                            </ol>*/}
                                                         </div>
                                                         <div className="default-form comment-respond style-1" id="respond">
                                                             <h4 className="comment-reply-title" id="reply-title">LEAVE A REPLY 

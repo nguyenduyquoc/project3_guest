@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import SimpleReactValidator from "simple-react-validator";
 
 //Components 
@@ -9,7 +9,10 @@ import {loginUser} from "../services/auth.service";
 import {toast} from "react-toastify";
 import {useLoading} from "../context/LoadingContext";
 
-function Login(){
+function Login(props){
+
+    const location = useLocation(); // Get the current location
+    const previousPath = location.state?.from || "/";
     const [forgotPass, setForgotPass] = useState();
 
     const { loadingDispatch} = useLoading();
@@ -28,7 +31,7 @@ function Login(){
     const [validator] = React.useState(new SimpleReactValidator({
         className: 'text-danger font-13'
     }));
-    const history = useHistory();
+
     const submitForm = async (e)=>{
         e.preventDefault();
         if (validator.allValid()) {
@@ -39,7 +42,7 @@ function Login(){
                 authDispatch({ type: 'SET_USER', payload: loginData.user });
                 console.log(loginData);
                 toast.success('You successfully Login!');
-                history.push('/');
+                props.history.push(previousPath);
             } catch (error) {
                 toast.error('Wrong email or password!');
             } finally {

@@ -4,6 +4,7 @@ import {Accordion} from 'react-bootstrap';
 
 import SlideDragable from './SlideDragable';
 import {useCategories} from "../context/CategoryContext";
+import {useLoading} from "../context/LoadingContext";
 
 const selectYear = [
     { year: 2022, year2: 2011},
@@ -78,7 +79,7 @@ const ShopSidebar = () =>{
                         <Accordion.Body >
                             <div className="range-slider style-1">
                                 <div id="slider-tooltips">
-                                    <SlideDragable />
+                                    <SlideDragable/>
                                 </div>
                             </div>
                         </Accordion.Body>
@@ -92,7 +93,7 @@ const ShopSidebar = () =>{
                                 <div className="">
                                     {renderCategoryCheckboxes(categories)}
                                 </div>
-                            </div>    
+                            </div>
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="2">
@@ -106,8 +107,8 @@ const ShopSidebar = () =>{
                                             {data.title}
                                         </label>
                                     </div>
-                                ))} 
-                                
+                                ))}
+
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
@@ -123,23 +124,23 @@ const ShopSidebar = () =>{
                                                 {item.year}
                                             </label>
                                         </div>
-                                    ))} 
-                                
+                                    ))}
+
                                 </div>
                                 <div className="">
                                     {selectYear.map((item,ind)=>(
                                         <div className="form-check search-content" key={ind}>
-                                            <input className="form-check-input" type="checkbox" value="" id={`productCheckBox${ind+33}`} /> 
+                                            <input className="form-check-input" type="checkbox" value="" id={`productCheckBox${ind+33}`} />
                                             <label className="form-check-label" htmlFor={`productCheckBox${ind+33}`}>
                                                 {item.year2}
                                             </label>
                                         </div>
-                                    ))}                                                        
+                                    ))}
                                 </div>
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
-                </Accordion>                                     
+                </Accordion>
                 {/*<Accordion className="accordion-filter accordion-inner" defaultActiveKey="0">
                     {accordionBlog2.map((data, index)=>(
                         <Accordion.Item eventKey={`${index}`}>
@@ -151,7 +152,7 @@ const ShopSidebar = () =>{
                                     <li><Link to={"#"}>Bullo The Cat</Link></li>
                                     <li><Link to={"#"}>Cut That Hair!</Link></li>
                                     <li><Link to={"#"}>Dragon Of The King</Link></li>
-                                </ul>              
+                                </ul>
                             </Accordion.Body>
                         </Accordion.Item>
                     ))}
@@ -164,7 +165,7 @@ const ShopSidebar = () =>{
                     </div>
                 </div>
             </div>
-            
+
         </>
     )
 }

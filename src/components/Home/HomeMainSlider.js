@@ -97,7 +97,7 @@ export default function HomeMainSlider() {
 												</div>
 												<div className="content-btn" data-swiper-parallax="-60">
 													<Link className="btn btn-primary btnhover" to={"books-grid-view"}>Buy Now</Link>
-													<Link className="btn border btnhover ms-4 text-white" to={"books-detail"}>See Details</Link>
+													<Link className="btn border btnhover ms-4 text-white" to={"shop-detail"}>See Details</Link>
 												</div>
 											</div>
 											<div className="partner">

@@ -120,7 +120,7 @@ function Footer({footerChange, logoImage}){
 									<ul>
 										<li><Link to={""}>Bookland</Link></li>
 										<li><Link to={"services"}>Services</Link></li>
-										<li><Link to={"books-detail"}>Book Details</Link></li>
+										<li><Link to={"shop-detail"}>Book Details</Link></li>
 										<li><Link to={"blog-detail"}>Blog Details</Link></li>
 										<li><Link to={"books-grid-view"}>Shop</Link></li>
 									</ul>   

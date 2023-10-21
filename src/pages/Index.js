@@ -9,7 +9,6 @@ import Main from '../layouts/Main';
 
 //Pages
 import Home from './Home';
-import Home2 from './Home2';
 import AboutUs from './AboutUs';
 import MyProfile from './MyProfile';
 import Services from './Services';
@@ -52,16 +51,6 @@ function Index(props){
 					<Route path='/under-construction' component={UnderConstruction} />
 					<Route path='/coming-soon' component={ComingSoon} />
 
-					<Route path="/index-2" exact>
-						<Header />
-							<Main>
-								<Switch>
-									<Route path='/index-2' exact component={Home2} />
-								</Switch>
-							</Main>
-						<Footer  footerChange="footer-dark" logoImage={logoWhite} />		
-					</Route>
-
 					<Route>
 						<Header />
 						<Main>
@@ -83,7 +72,7 @@ function Index(props){
 								<Route path='/shop-login' exact component={Login} />
 								<Route path='/shop-registration' exact component={Registration} />
 								<Route path='/shop-checkout' exact component={ShopCheckout} />
-								<Route path='/books-detail' exact component={ShopDetail} />
+								<Route path='/shop-detail/:slug' exact component={ShopDetail} />
 								<Route path='/blog-grid' exact component={BlogGrid} />
 								<Route path='/blog-large-sidebar' exact component={BlogLargeSidebar} />
 								<Route path='/blog-list-sidebar' exact component={BlogListSidebar} />

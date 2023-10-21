@@ -92,7 +92,7 @@ function FeaturedSlider() {
                                 </div>
                                 <div className="bookcard-footer">
                                     <Link to={"shop-cart"} className="btn btn-primary btnhover m-t15 m-r10">Buy Now</Link>
-                                    <Link to={"books-detail"} className="btn btn-outline-secondary btnhover m-t15">See Details</Link>
+                                    <Link to={"shops-detail"} className="btn btn-outline-secondary btnhover m-t15">See Details</Link>
                                 </div>
                             </div>
                         </div>
