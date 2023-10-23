@@ -64,9 +64,9 @@ function Footer({footerChange, logoImage}){
 				<div className="footer-category">
 					<div className="container">
 						<div className="category-toggle">
-							<Link to={"#"} className={`toggle-btn ${accordBtn ? 'active' : ''}`}
+							<div style={{cursor: "pointer"}} className={`toggle-btn ${accordBtn ? 'active' : ''}`}
 								onClick={() => setAccordBtn(!accordBtn)}
-							>All categories</Link>
+							>All categories</div>
 							<div className="toggle-items row">
 								<Collapse in={accordBtn} className="footer-col-book">
 									<ul>

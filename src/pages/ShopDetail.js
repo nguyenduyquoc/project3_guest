@@ -216,6 +216,17 @@ function ShopDetail(){
                                                                     </li>
                                                                 ))}
                                                             </ol>*/}
+                                                            <ol className="comment-list">
+                                                                {product.reviews && Array.isArray(product.reviews) && product.reviews.map((review, i) => (
+                                                                    <li key={i} className="comment odd alt thread-even depth-1 comment" id={`comment-${i}`}>
+                                                                        <p>{review.comment}</p>
+                                                                        <p>{review.orderId}</p>
+                                                                        <p>{review.rating}</p>
+                                                                        <p>{review.editAble}</p>
+                                                                        <p>{formatDate(review.createdAt)}</p>
+                                                                    </li>
+                                                                ))}
+                                                            </ol>
                                                         </div>
                                                         <div className="default-form comment-respond style-1" id="respond">
                                                             <h4 className="comment-reply-title" id="reply-title">LEAVE A REPLY 

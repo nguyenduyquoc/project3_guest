@@ -3,7 +3,7 @@ import api from './api';
 export const getProducts = async (filterCriteria) => {
     const endpoint = `Product/get_all_products`;
     try {
-        const response = await api.post(endpoint, { params: { filterCriteria } });
+        const response = await api.post(endpoint, filterCriteria);
         return response.data;
     } catch (error) {
         console.error('Error fetching filtered products:', error);

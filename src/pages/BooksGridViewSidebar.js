@@ -56,26 +56,13 @@ const lableBlogData = [
     {name:'Mathematics'}
 ];
 
-const cardDetials = [
-    {image:book16, title:'Thunder Stunt', subtitle1:'ADVANTURE',subtitle2:'SCIENCE', price1:'54.78', price2:'70.00' },
-    {image:book14, title:'A Heavy Lift', subtitle1:'RACING',subtitle2:'DRAMA', price1:'25.18', price2:'68.00' },
-    {image:book15, title:'Terrible Madness', subtitle1:'SPORTS',subtitle2:'GAME', price1:'25.30', price2:'38.00' },
-    {image:book4, title:'Such Fun Age', subtitle1:'ADVANTURE', price1:'20.15', price2:'33.00' },
-    {image:book9, title:'Pushing Clouds', subtitle1:'ADVANTURE', price1:'30.12', price2:'40.00' },
-    {image:book2, title:'Homie', subtitle1:'HORROR',subtitle2:'DRAMA', price1:'15.25', price2:'45.00' },
-    {image:book7, title:'SECONDS', subtitle1:'SPORTS',subtitle2:'GAME', price1:'21.78', price2:'36.00' },
-    {image:book13, title:'REWORK', subtitle1:'THRILLER', price1:'23.20', price2:'49.00' },
-    {image:book11, title:'ALL GOOD NEWS', subtitle1:'DRAMA',subtitle2:'COMEDY', price1:'40.78', price2:'68.00' },
-    {image:book10, title:'Emily The Back', subtitle1:'DRAMA',subtitle2:'SIRIAL', price1:'54.78', price2:'63.00' },
-    {image:book8, title:'The Adventure', subtitle1:'BIOGRAPHY', price1:'37.00', price2:'47.00' },
-    {image:book14, title:'A Heavy Lift', subtitle1:'STORY',subtitle2:'BIOGRAPHY', price1:'22.00', price2:'51.00' },
-];
-
 
 
 function BooksGridViewSidebar(){
     const [accordBtn, setAccordBtn] = useState();
     const [selectBtn, setSelectBtn] = useState('Newest');
+    const [showSidebar, setShowSidebar] = useState(true);
+    const [gridLayout, setGridLayout] = useState(true);
 
     const {loadingDispatch} = useLoading();
     const [products, setProducts] = useState([]);
@@ -83,14 +70,14 @@ function BooksGridViewSidebar(){
     const [totalItems, setTotalItems] = useState(0);
     const [filterCriteria, setFilterCriteria] = useState({
             page: 1,
-            pageSize: 12,
+            pageSize: 9,
             minPrice: null,
             maxPrice: null,
             categoryIds: [],
             authorIds: [],
             publisherIds: [],
             publishYears: [],
-            sortBy: null,
+            sortBy: "newest",
             searchQuery: null,
             status: 1
         }
@@ -110,6 +97,9 @@ function BooksGridViewSidebar(){
             setTotalItems(response.totalItems);
         } catch (error) {
             console.log(error);
+            setProducts([]);
+            setTotalItems(0);
+            setTotalPages(1);
         } finally {
             loadingDispatch({type: 'STOP_LOADING'});
         }
@@ -118,6 +108,13 @@ function BooksGridViewSidebar(){
     const handlePageChange = (pageNumber) => {
         setFilterCriteria({...filterCriteria, page: pageNumber});
     };
+
+    const handleSortChange = (selectedSortOption) => {
+        setFilterCriteria({
+            ...filterCriteria,
+            sortBy: selectedSortOption,
+        });
+    };
     return(
         <>
             <div className="page-content bg-grey">
@@ -125,7 +122,11 @@ function BooksGridViewSidebar(){
                     <div className="container">
                         <div className="row ">  
                             <div className="col-xl-3">
-                                <ShopSidebar />
+                                <ShopSidebar
+                                    filterCriteria={filterCriteria}
+                                    setFilterCriteria={setFilterCriteria}
+                                    setShowSidebar={setShowSidebar}
+                                />
                             </div>
                            
                             <div className="col-xl-9">
@@ -167,30 +168,34 @@ function BooksGridViewSidebar(){
                                         </div>
                                     </div>
                                     <div className="category">
-                                        <div className="filter-category">
+                                        {/*<div className="filter-category">
                                             <Link to={"#"} data-bs-toggle="collapse"  
                                                 onClick={() => setAccordBtn(!accordBtn)}
                                             >
                                                 <i className="fas fa-list me-2"></i>
                                                 Categories
                                             </Link>
-                                        </div>
+                                        </div>*/}
                                         <div className="form-group">
                                             <i className="fas fa-sort-amount-down me-2 text-secondary"></i>                                   
                                             <Dropdown>
-                                                <Dropdown.Toggle  className="i-false">{selectBtn} <i className="ms-4 font-14 fa-solid fa-caret-down" /></Dropdown.Toggle>
+                                                <Dropdown.Toggle  className="i-false">
+                                                    {filterCriteria.sortBy} <i className="ms-4 font-14 fa-solid fa-caret-down" />
+                                                </Dropdown.Toggle>
                                                 <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={()=>setSelectBtn('Newest')}>Newest</Dropdown.Item>
-                                                    <Dropdown.Item onClick={()=>setSelectBtn('1 Days')}>1 Days</Dropdown.Item>
-                                                    <Dropdown.Item onClick={()=>setSelectBtn('2 Week')}>2 Week</Dropdown.Item>
-                                                    <Dropdown.Item onClick={()=>setSelectBtn('3 Week')}>3 Weeks</Dropdown.Item>
-                                                    <Dropdown.Item onClick={()=>setSelectBtn('1 Month')}>1 Month</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('newest')}>Newest</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('oldest')}>Oldest</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('highestprice')}>Highest Price</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('lowestprice')}>Lowest Price</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('highestdiscount')}>Highest Discount</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('highestrating')}>Highest Rating</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleSortChange('bestseller')}>Best Seller</Dropdown.Item>
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                         </div>
                                     </div>
                                 </div>
-                                <Collapse in={accordBtn} className="acod-content">
+                                {/*<Collapse in={accordBtn} className="acod-content">
                                     <div>
                                         <div className="widget widget_services style-2">
                                             {lableBlogData.map((item, ind)=>(
@@ -203,7 +208,7 @@ function BooksGridViewSidebar(){
                                             ))}
                                         </div>   
                                     </div>
-                                </Collapse>
+                                </Collapse>*/}
                                 <div className="row book-grid-row">
                                     {products.map((product, i)=>(
                                         <div className="col-book style-2" key={i}>
@@ -257,18 +262,9 @@ function BooksGridViewSidebar(){
                                 </div>
                                 <div className="row page mt-0">
                                     <div className="col-md-6">
-                                        <p className="page-text">Showing 12 from {totalItems} data</p>
+                                        <p className="page-text">Showing {products.length} from {totalItems} data</p>
                                     </div>
                                     <div className="col-md-6">
-                                        <nav aria-label="Blog Pagination">
-                                            <ul className="pagination style-1 p-t20">
-                                                <li className="page-item"><Link to={"#"} className="page-link prev" >Prev</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link active" >1</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link">2</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link">3</Link></li>
-                                                <li className="page-item"><Link to={"#"} className="page-link next" >Next</Link></li>
-                                            </ul>
-                                        </nav>
                                         <Pagination currentPage={filterCriteria.page} totalPages={totalPages} onPageChange={handlePageChange} />
                                     </div>
                                 </div>
