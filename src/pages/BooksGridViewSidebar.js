@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Button, Collapse, Dropdown} from 'react-bootstrap';
+import {Button, Dropdown} from 'react-bootstrap';
 
 //Component
 import ClientsSlider from '../components/Home/ClientsSlider';
@@ -17,6 +17,8 @@ import {formatCurrency} from "../utils/currencyFormatter";
 import Pagination from "../layouts/Pagination";
 import {useCart} from "../context/CartContext";
 import {toast} from "react-toastify";
+import {likeOrUnlikeProduct} from "../services/user.service";
+import {useUser} from "../context/UserContext";
 
 function BooksGridViewSidebar(){
     const [showSidebar, setShowSidebar] = useState(true);
@@ -91,6 +93,25 @@ function BooksGridViewSidebar(){
         cartDispatch({ type: 'ADD_TO_CART', payload: { product: productToAdd } });
         toast.success('Add to Cart!');
         loadingDispatch({type: 'STOP_LOADING'});
+    }
+
+    const { likedProductIds, fetchLikedProducts  } = useUser();
+
+    useEffect(() => {
+        fetchLikedProducts();
+    }, [])
+
+    const handleLikeButton = async (id) => {
+        try {
+            loadingDispatch({type : "START_LOADING"});
+            await likeOrUnlikeProduct(id);
+            await fetchLikedProducts();
+            toast.success("Like/Unlike successfully")
+        } catch (error) {
+            toast.error("You need to login")
+        } finally {
+            loadingDispatch({type: 'STOP_LOADING'});
+        }
     }
     return(
         <>
@@ -200,7 +221,13 @@ function BooksGridViewSidebar(){
                                                     <img src={addAutoWidthTransformation(product.thumbnail)} alt="book" />
                                                 </div>
                                                 <div className="bookmark-btn style-2">
-                                                    <input className="form-check-input" type="checkbox" id={`flexCheckDefault${product.id}`} />
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id={`flexCheckDefault${product.id}`}
+                                                        checked={likedProductIds.includes(product.id)}
+                                                        onChange={() => handleLikeButton(product.id)}
+                                                    />
                                                     <label className="form-check-label" htmlFor={`flexCheckDefault${product.id}`}>
                                                         <i className="flaticon-heart"></i>
                                                     </label>

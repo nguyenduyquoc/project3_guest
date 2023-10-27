@@ -11,4 +11,24 @@ export const updateUserProfile = async (updateData) => {
     }
 }
 
+export const getLikeProducts = async () => {
+    const endpoint = `User/liked_products`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
+export const likeOrUnlikeProduct = async (id) => {
+    const endpoint = `User/like_product/${id}`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
