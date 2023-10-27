@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Collapse, Dropdown} from 'react-bootstrap';
+import {Button, Collapse, Dropdown} from 'react-bootstrap';
 
 //Component
 import ClientsSlider from '../components/Home/ClientsSlider';
@@ -10,60 +10,19 @@ import NewsLetter from '../components/NewsLetter';
 import CounterSection from '../elements/CounterSection';
 import ShopSidebar from '../elements/ShopSidebar';
 
-//Images
-import book16 from './../assets/images/books/grid/book16.jpg';
-import book8 from './../assets/images/books/grid/book8.jpg';
-import book14 from './../assets/images/books/grid/book14.jpg';
-import book15 from './../assets/images/books/grid/book15.jpg';
-import book4 from './../assets/images/books/grid/book4.jpg';
-import book9 from './../assets/images/books/grid/book9.jpg';
-import book2 from './../assets/images/books/grid/book2.jpg';
-import book7 from './../assets/images/books/grid/book7.jpg';
-import book13 from './../assets/images/books/grid/book13.jpg';
-import book10 from './../assets/images/books/grid/book10.jpg';
-import book11 from './../assets/images/books/grid/book11.jpg';
 import {useLoading} from "../context/LoadingContext";
 import {getProducts} from "../services/product.service";
 import {addAutoWidthTransformation} from "../utils/cloudinaryUtils";
 import {formatCurrency} from "../utils/currencyFormatter";
 import Pagination from "../layouts/Pagination";
-
-const lableBlogData = [
-    {name:'Architecture'},
-    {name:'Art'},
-    {name:'Action'},
-    {name:'Biography & Autobiography'},
-    {name:'Body, Mind & Spirit'},
-    {name:'Business & Economics'},    
-    {name:'Children Fiction'},
-    {name:'Children Non-Fiction'},
-    {name:'Comics & Graphic Novels'},
-    {name:'Cooking'},
-    {name:'Crafts & Hobbies'},
-    {name:'Design'},
-    {name:'Drama'},
-    {name:'Education'},
-    {name:'Family & Relationships'},
-    {name:'Fiction'},
-    {name:'Foreign Language Study'},
-    {name:'Games'},
-    {name:'Gardening'},
-    {name:'Health & Fitness'},
-    {name:'History'},
-    {name:'House & Home'},
-    {name:'Humor'},
-    {name:'Literary Collections'},
-    {name:'Mathematics'}
-];
-
-
+import {useCart} from "../context/CartContext";
+import {toast} from "react-toastify";
 
 function BooksGridViewSidebar(){
-    const [accordBtn, setAccordBtn] = useState();
-    const [selectBtn, setSelectBtn] = useState('Newest');
     const [showSidebar, setShowSidebar] = useState(true);
     const [gridLayout, setGridLayout] = useState(true);
 
+    const { cartDispatch } = useCart();
     const {loadingDispatch} = useLoading();
     const [products, setProducts] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
@@ -115,6 +74,24 @@ function BooksGridViewSidebar(){
             sortBy: selectedSortOption,
         });
     };
+
+    const addToCart = (product) => {
+        if (product.quantity === 0) {
+            toast.error('Out of Stock!');
+            return;
+        }
+
+        loadingDispatch({type: 'START_LOADING'});
+        // Create a new product object with the selectedGift and buy_quantity
+        const productToAdd = {
+            ...product,
+            buy_quantity: 1,
+        };
+        // Dispatch the ADD_TO_CART action with the product
+        cartDispatch({ type: 'ADD_TO_CART', payload: { product: productToAdd } });
+        toast.success('Add to Cart!');
+        loadingDispatch({type: 'STOP_LOADING'});
+    }
     return(
         <>
             <div className="page-content bg-grey">
@@ -122,17 +99,23 @@ function BooksGridViewSidebar(){
                     <div className="container">
                         <div className="row ">  
                             <div className="col-xl-3">
-                                <ShopSidebar
-                                    filterCriteria={filterCriteria}
-                                    setFilterCriteria={setFilterCriteria}
-                                    setShowSidebar={setShowSidebar}
-                                />
+                                {
+                                    showSidebar ?
+                                        <ShopSidebar
+                                            filterCriteria={filterCriteria}
+                                            setFilterCriteria={setFilterCriteria}
+                                            setShowSidebar={setShowSidebar}
+                                        /> : null
+                                }
                             </div>
                            
                             <div className="col-xl-9">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h4 className="title">Books</h4>
-                                    <Link to={"#"} className="btn btn-primary panel-btn">Filter</Link>
+                                    <Button
+                                        className="btn btn-primary panel-btn"
+                                        onClick={() => setShowSidebar(!showSidebar)}
+                                    >Show Sidebar</Button>
                                 </div>
                                 <div className="filter-area m-b30">
                                     <div className="grid-area">
@@ -200,13 +183,13 @@ function BooksGridViewSidebar(){
                                         <div className="widget widget_services style-2">
                                             {lableBlogData.map((item, ind)=>(
                                                 <div className="form-check search-content" key={ind}>
-                                                    <input className="form-check-input" type="checkbox" value="" id={`productCheckBox${ind+1}`} /> 
+                                                    <input className="form-check-input" type="checkbox" value="" id={`productCheckBox${ind+1}`} />
                                                     <label className="form-check-label" htmlFor={`productCheckBox${ind+1}`}>
                                                         {item.name}
                                                     </label>
                                                 </div>
                                             ))}
-                                        </div>   
+                                        </div>
                                     </div>
                                 </Collapse>*/}
                                 <div className="row book-grid-row">
@@ -221,7 +204,7 @@ function BooksGridViewSidebar(){
                                                     <label className="form-check-label" htmlFor={`flexCheckDefault${product.id}`}>
                                                         <i className="flaticon-heart"></i>
                                                     </label>
-                                                </div> 
+                                                </div>
                                                 <div className="dz-content">
                                                     <h5 className="title"><Link to={`shop-detail/${product.slug}`}>{product.name}</Link></h5>
                                                     <ul className="dz-tags text-uppercase" style={{overflowX: "hidden", whiteSpace: "nowrap", display: "block" }}>
@@ -235,11 +218,11 @@ function BooksGridViewSidebar(){
                                                         )}
                                                     </ul>
                                                     <ul className="dz-rating">
-                                                        <li><i className="flaticon-star text-yellow"></i></li>	
-                                                        <li><i className="flaticon-star text-yellow"></i></li>	
-                                                        <li><i className="flaticon-star text-yellow"></i></li>	
-                                                        <li><i className="flaticon-star text-yellow"></i></li>		
-                                                        <li><i className="flaticon-star text-yellow"></i></li>		
+                                                        <li><i className="flaticon-star text-yellow"></i></li>
+                                                        <li><i className="flaticon-star text-yellow"></i></li>
+                                                        <li><i className="flaticon-star text-yellow"></i></li>
+                                                        <li><i className="flaticon-star text-yellow"></i></li>
+                                                        <li><i className="flaticon-star text-yellow"></i></li>
                                                     </ul>
                                                     <div className="book-footer">
                                                         {product.discountAmount ?
@@ -252,13 +235,13 @@ function BooksGridViewSidebar(){
                                                                 <span className="price-num">{formatCurrency(product.price)}</span>
                                                             </div>
                                                         }
-                                                        <Link to={"shop-cart"} className="btn btn-secondary box-btn btnhover btnhover2"><i className="flaticon-shopping-cart-1 m-r10"></i> Add to cart</Link>
+                                                        <Button onClick={() => addToCart(product)} className="btn btn-secondary box-btn btnhover btnhover2"><i className="flaticon-shopping-cart-1 m-r10"></i> Add to cart</Button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}   
-                                    
+                                    ))}
+
                                 </div>
                                 <div className="row page mt-0">
                                     <div className="col-md-6">

@@ -297,14 +297,14 @@ const ShopSidebar = ({filterCriteria, setFilterCriteria, setShowSidebar}) =>{
                             className="btn btn-outline-secondary btnhover mt-3 d-block"
                             onClick={() => setFilterCriteria({
                                 page: 1,
-                                pageSize: 12,
+                                pageSize: 9,
                                 minPrice: null,
                                 maxPrice: null,
                                 categoryIds: [],
                                 authorIds: [],
                                 publisherIds: [],
                                 publishYears: [],
-                                sortBy: null,
+                                sortBy: "newest",
                                 searchQuery: null,
                                 status: 1
                             })}

@@ -13,24 +13,31 @@ import {LoadingProvider} from "./context/LoadingContext";
 import Loading from "./layouts/Loading";
 import {ProvinceProvider} from "./context/ProvinceContext";
 import {CouponProvider} from "./context/CouponContext";
+import {CartProvider} from "./context/CartContext";
+import {PayPalScriptProvider} from "@paypal/react-paypal-js";
+import {CLIENT_ID} from "./config"
 
 function App() {
 	return (
 		<AuthProvider>
 			<UserProvider>
-				<LoadingProvider>
-					<CategoryProvider>
-						<ProvinceProvider>
-							<CouponProvider>
-								<Loading />
-								<div className="App">
-									<Index />
-									<ToastContainer />
-								</div>
-							</CouponProvider>
-						</ProvinceProvider>
-					</CategoryProvider>
-				</LoadingProvider>
+				<CartProvider>
+					<LoadingProvider>
+						<CategoryProvider>
+							<ProvinceProvider>
+								<CouponProvider>
+									<PayPalScriptProvider options={{ "client-id": CLIENT_ID }}>
+										<Loading />
+										<div className="App">
+											<Index />
+											<ToastContainer />
+										</div>
+									</PayPalScriptProvider>
+								</CouponProvider>
+							</ProvinceProvider>
+						</CategoryProvider>
+					</LoadingProvider>
+				</CartProvider>
 			</UserProvider>
 		</AuthProvider>
 
