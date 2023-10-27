@@ -1,117 +1,251 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 
-import profile from './../assets/images/profile3.jpg';
-
-const proiflePages = [
-    {to:'shop-cart', icons:'flaticon-shopping-cart-1', name:'My Cart'},
-    {to:'wishlist', icons:'far fa-heart', name:'Wishlist'},
-    {to:'books-grid-view', icons:'fa fa-briefcase', name:'Shop'},
-    {to:'services', icons:'far fa-bell', name:'Services'},
-    {to:'help-desk', icons:'far fa-id-card', name:'Help Desk'},
-    {to:'privacy-policy', icons:'fa fa-key', name:'Privacy Policy'},
-    {to:'shop-login', icons:'fas fa-sign-out-alt', name:'Log Out'},
-];
-
-const inputBlock = [
-    {labelName:'Your Name', placeHoldName:'Alexander Weir', },
-    {labelName:'Professional title', placeHoldName:'Web Designer', },
-    {labelName:'Languages', placeHoldName:'Language', },
-    {labelName:'Age', placeHoldName:'Age', },
-];
-const inputBlockContact = [
-    {labelName:'Contact Number', placeHoldName:'+1 123 456 7890', },
-    {labelName:'Email Address', placeHoldName:'info@example.com', },
-    {labelName:'Country', placeHoldName:'Country Name', },
-    {labelName:'Postcode', placeHoldName:'112233', },
-    {labelName:'City', placeHoldName:'City Name', },
-    {labelName:'Full Address', placeHoldName:'New York City', },
-];
+import {useLoading} from "../context/LoadingContext";
+import {useUser} from "../context/UserContext";
+import ProfileSidebar from "../elements/ProfileSidebar";
+import SimpleReactValidator from "simple-react-validator";
+import {toast} from "react-toastify";
+import {updateUserProfile} from "../services/user.service";
+import {resetPassword} from "../services/auth.service";
 
 function MyProfile(){
+
+    const { loadingDispatch } = useLoading();
+    const { user, getUserFromToken } = useUser();
+
+    const [ formData, setFormData ] = useState({
+        fname: '',
+        lname: '',
+        email: '',
+        phone: ''
+    });
+
+    useEffect(() => {
+        if (user != null) {
+            setFormData ({
+                ...formData,
+                fname : user.fname || '',
+                lname : user.lname || '',
+                email : user.email || '',
+                phone : user.phone || '',
+            })
+        }
+    }, [user])
+
+
+    const changeHandler = (e) => {
+        setFormData( {
+            ...formData,
+            [e.target.name] : e.target.value
+        });
+        validator.showMessages();
+    }
+
+    const [validator] = React.useState(new SimpleReactValidator({
+        className: 'text-danger font-13'
+    }));
+
+    const submitUpdateProfileForm = async (e) => {
+        e.preventDefault();
+        if (validator.allValid()) {
+            try {
+                loadingDispatch({type: 'START_LOADING'});
+
+                // update user profile:
+                await updateUserProfile({
+                    fname: formData.fname,
+                    lname: formData.lname,
+                    email: formData.email,
+                    phone: formData.phone,
+                    avatar: ''
+                });
+                getUserFromToken();
+                toast.success('Update profile success!');
+            } catch (error) {
+                toast.error('Fail updating profile!');
+            } finally {
+                loadingDispatch({type: 'STOP_LOADING'});
+            }
+        } else {
+            toast.error('Input validation fail!');
+        }
+    };
+
+
+    // RESET PASSWORD
+    const [ resetPwFormData, setResetPwFormData ] = useState({
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+
+    const [passwordValidator] = React.useState(new SimpleReactValidator({
+        className: 'text-danger font-13',
+        messages: {
+            in: 'The confirm password field does not match'
+        },
+    }));
+
+    const passwordChangeHandler = (e) => {
+        setResetPwFormData({...resetPwFormData, [e.target.name]: e.target.value});
+        passwordValidator.showMessages();
+    };
+
+    const submitResetPasswordForm = async (e) => {
+        e.preventDefault();
+        if (passwordValidator.allValid()) {
+            try {
+                loadingDispatch({type: 'START_LOADING'});
+                // Then update user profile:
+                await resetPassword({
+                    oldPassword: resetPwFormData.oldPassword,
+                    newPassword: resetPwFormData.newPassword
+                });
+                toast.success('Reset password successfully!');
+                setResetPwFormData({
+                    oldPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                })
+            } catch (error) {
+                toast.error('Fail to reset password!');
+            } finally {
+                loadingDispatch({type: 'STOP_LOADING'});
+            }
+        } else {
+            toast.error('Input validation fail!');
+        }
+    };
     return(
         <>
-             <div className="page-content bg-white">
-                <div className="content-block">
-                    <section className="content-inner bg-white">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-xl-3 col-lg-4 m-b30">
-                                    <div className="sticky-top">
-                                        <div className="shop-account">
-                                            <div className="account-detail text-center">
-                                                <div className="my-image">
-                                                    <Link to={"#"}>
-                                                        <img alt="profile" src={profile} />
-                                                    </Link>
-                                                </div>
-                                                <div className="account-title">
-                                                    <div className="">
-                                                        <h4 className="m-b5"><Link to={"#"}>David Matin</Link></h4>
-                                                        <p className="m-b0"><Link to={"#"}>Web developer</Link></p>
+            {user != null &&
+                <div className="page-content bg-white">
+                    <div className="content-block">
+                        <section className="content-inner bg-white">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-xl-3 col-lg-4 m-b30">
+                                        <ProfileSidebar user={user} />
+                                    </div>
+                                    <div className="col-xl-9 col-lg-8 m-b30">
+                                        <div className="shop-bx shop-profile">
+                                            <div className="shop-bx-title clearfix">
+                                                <h5 className="text-uppercase">User Information</h5>
+                                            </div>
+                                            <form id="profile-update-form" onSubmit={submitUpdateProfileForm}>
+                                                <div className="row m-b30">
+                                                    <div className="col-lg-6 col-md-6">
+                                                        <div className="mb-3">
+                                                            <label className="form-label">First Name</label>
+                                                            <input
+                                                                type="text"
+                                                                name="fname"
+                                                                className="form-control"
+                                                                value={formData.fname}
+                                                                onChange={(e) => changeHandler(e)}
+                                                            />
+                                                            {validator.message('firstName', formData.fname, 'required')}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-6 col-md-6">
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Last Name</label>
+                                                            <input
+                                                                type="text"
+                                                                name="lname"
+                                                                className="form-control"
+                                                                value={formData.lname}
+                                                                onChange={(e) => changeHandler(e)}
+                                                            />
+                                                            {validator.message('lastName', formData.lname, 'required')}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-6 col-md-6">
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Email</label>
+                                                            <input
+                                                                type="email"
+                                                                name="email"
+                                                                className="form-control"
+                                                                value={formData.email}
+                                                                onChange={(e) => changeHandler(e)}
+                                                            />
+                                                            {validator.message('email', formData.email, 'required|email')}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-6 col-md-6">
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Phone Number</label>
+                                                            <input
+                                                                type="text"
+                                                                name="phone"
+                                                                className="form-control"
+                                                                value={formData.phone}
+                                                                onChange={(e) => changeHandler(e)}
+                                                            />
+                                                            {validator.message('phone', formData.phone, 'phone')}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <button className="btn btn-primary btnhover mt-2" type="submit">Save Setting</button>
+                                            </form>
+
+                                            <div className="shop-bx-title clearfix mt-5">
+                                                <h5 className="text-uppercase">Reset Password</h5>
                                             </div>
-                                            <ul className="account-list">
-                                                <li>
-                                                    <Link to={"my-profile"} className="active"><i className="far fa-user" aria-hidden="true"></i> 
-                                                    <span>Profile</span></Link>
-                                                </li>
-                                                {proiflePages.map((item, ind)=>(
-                                                    <li key={ind}>
-                                                        <Link to={item.to}><i className={item.icons}></i>
-                                                            <span>{item.name}</span>
-                                                        </Link>
-                                                    </li>
-                                                ))}                                                
-                                            </ul>
+                                            <form onSubmit={submitResetPasswordForm}>
+                                                <div className="row">
+                                                    <div className="col-lg-6 col-md-6">
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Old Password</label>
+                                                            <input
+                                                                type="password"
+                                                                name="oldPassword"
+                                                                className="form-control"
+                                                                value={resetPwFormData.oldPassword}
+                                                                onChange={(e) => passwordChangeHandler(e)}
+                                                            />
+                                                            {passwordValidator.message('oldPassword', resetPwFormData.oldPassword, 'required|min:6')}
+                                                        </div>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">New Password</label>
+                                                            <input
+                                                                type="password"
+                                                                name="newPassword"
+                                                                className="form-control"
+                                                                value={resetPwFormData.newPassword}
+                                                                onChange={(e) => passwordChangeHandler(e)}
+                                                            />
+                                                            {passwordValidator.message('newPassword', resetPwFormData.newPassword, 'required|min:6')}
+                                                        </div>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Confirm New Password</label>
+                                                            <input
+                                                                type="password"
+                                                                name="confirmPassword"
+                                                                className="form-control"
+                                                                value={resetPwFormData.confirmPassword}
+                                                                onChange={(e) => passwordChangeHandler(e)}
+                                                            />
+                                                            {passwordValidator.message('confirmPassword', resetPwFormData.confirmPassword, `required|min:6|in:${resetPwFormData.newPassword}`)}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    className="btn btn-primary btnhover mt-3"
+                                                    type="submit"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-xl-9 col-lg-8 m-b30">
-                                    <div className="shop-bx shop-profile">
-                                        <div className="shop-bx-title clearfix">
-                                            <h5 className="text-uppercase">Basic Information</h5>
-                                        </div>
-                                        <form onSubmit={(e) => e.preventDefault()}>
-                                            <div className="row m-b30">
-                                                {inputBlock.map((data, ind)=>(
-                                                    <div className="col-lg-6 col-md-6" key={ind}>
-                                                        <div className="mb-3">
-                                                            <label htmlFor={`formcontrolinput${ind+1}`} className="form-label">{data.labelName} :</label>
-                                                            <input type="text" className="form-control" id={`formcontrolinput${ind+1}`} placeholder={data.placeHoldName} />
-                                                        </div>
-                                                    </div>
-                                                ))}   
-                                                <div className="col-lg-12 col-md-12">                                                    
-                                                    <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlTextarea" className="form-label">Description:</label>
-                                                        <textarea className="form-control"  id="exampleFormControlTextarea" rows="5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s.</textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="shop-bx-title clearfix">
-                                                <h5 className="text-uppercase">Contact Information</h5>
-                                            </div>
-                                            <div className="row">
-                                                {inputBlockContact.map((data, ind)=>(
-                                                    <div className="col-lg-6 col-md-6" key={ind}>
-                                                        <div className="mb-3">
-                                                            <label htmlFor={`formcontrolinput1${ind+5}`} className="form-label">{data.labelName} :</label>
-                                                            <input type="text" className="form-control" id={`formcontrolinput1${ind+5}`} placeholder={data.placeHoldName} />
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <button className="btn btn-primary btnhover mt-2">Save Setting</button>
-                                        </form>
-                                    </div>    
-                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
-             </div>
+            }
         </>
     )
 }

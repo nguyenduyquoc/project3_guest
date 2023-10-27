@@ -19,10 +19,10 @@ import {CLIENT_ID} from "./config"
 
 function App() {
 	return (
-		<AuthProvider>
-			<UserProvider>
-				<CartProvider>
-					<LoadingProvider>
+		<LoadingProvider>
+			<AuthProvider>
+				<UserProvider>
+					<CartProvider>
 						<CategoryProvider>
 							<ProvinceProvider>
 								<CouponProvider>
@@ -36,10 +36,10 @@ function App() {
 								</CouponProvider>
 							</ProvinceProvider>
 						</CategoryProvider>
-					</LoadingProvider>
-				</CartProvider>
-			</UserProvider>
-		</AuthProvider>
+					</CartProvider>
+				</UserProvider>
+			</AuthProvider>
+		</LoadingProvider>
 
 	);
 }
