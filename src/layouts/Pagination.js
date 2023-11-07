@@ -12,7 +12,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
                     onClick={() => onPageChange(i)}
                     className="page-item"
                 >
-                    <Link className={currentPage === i ? 'page-link active' : 'page-link'}>{i}</Link>
+                    <Link to="" className={currentPage === i ? 'page-link active' : 'page-link'}>{i}</Link>
                 </li>
             )
         }
@@ -24,11 +24,11 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         <nav aria-label="Blog Pagination">
             <ul className="pagination style-1 p-t20">
                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <Link className="page-link prev" onClick={() => onPageChange(currentPage - 1)}>Prev</Link>
+                    <Link to="" className="page-link prev" onClick={() => onPageChange(currentPage - 1)}>Prev</Link>
                 </li>
                 {renderPages()}
                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                    <Link className="page-link next" onClick={() => onPageChange(currentPage + 1)}>Next</Link>
+                    <Link to="" className="page-link next" onClick={() => onPageChange(currentPage + 1)}>Next</Link>
                 </li>
             </ul>
         </nav>

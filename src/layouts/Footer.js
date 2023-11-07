@@ -50,7 +50,7 @@ function Footer({footerChange, logoImage}){
 			<>
 				{categories.map((category) => (
 					<React.Fragment key={category.id}>
-						<li><Link>{category.name}</Link></li>
+						<li><Link to="">{category.name}</Link></li>
 						{category.inverseParent.length > 0 &&
 							renderCategoriesList(category.inverseParent)}
 					</React.Fragment>
@@ -72,7 +72,7 @@ function Footer({footerChange, logoImage}){
 									<ul>
 										{categories.map((category, id)=>(
 											<React.Fragment key={id}>
-												<li className="w-100 fw-bold border-bottom"><Link>{category.name}</Link></li>
+												<li className="w-100 fw-bold border-bottom"><Link to="">{category.name}</Link></li>
 												{category.inverseParent.length > 0 &&
 													renderCategoriesList(category.inverseParent)}
 											</React.Fragment>
@@ -89,7 +89,7 @@ function Footer({footerChange, logoImage}){
 							<div className="col-xl-3 col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
 								<div className="widget widget_about">
 									<div className="footer-logo logo-white">
-										<Link to={""}><img src={logoImage} alt="" /></Link> 
+										<Link to=""><img src={logoImage} alt="" /></Link>
 									</div>
 									<p className="text">Shradha General Book Stores is a Book Store Ecommerce Website by Shradha</p>
 									<div className="dz-social-icon style-1">

@@ -240,7 +240,7 @@ function BooksGridViewSidebar(){
                                                                 key={category.id}
                                                                 className="d-inline-block"
                                                             >
-                                                                <Link>{category.name}{index < product.categories.length - 1 && ","}</Link>
+                                                                <Link to="">{category.name}{index < product.categories.length - 1 && ","}</Link>
                                                             </li>
                                                         )}
                                                     </ul>

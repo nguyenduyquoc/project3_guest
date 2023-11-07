@@ -36,19 +36,19 @@ function ProfileSidebar ({user}) {
                         </Link>
                     </li>
                     <li>
-                        <Link to={"/return-requests"} className={location.pathname.startsWith('/return-requests') ? 'active' : ''}>
+                        <Link to={"/return_request_history"} className={location.pathname.startsWith('/return-requests') ? 'active' : ''}>
                             <i className="flaticon-transfer"></i>
                             <span>Return Request</span>
                         </Link>
                     </li>
                     <li>
-                        <Link to={"my-profile"} className="">
+                        <Link to={"/my-profile"} className="">
                             <i className="fas fa-map-marker-alt"></i>
                             <span>Addresses</span>
                         </Link>
                     </li>
                     <li>
-                        <Link
+                        <Link to={"#"}
                             className=""
                             onClick={() => {
                                 authDispatch({ type: 'LOGOUT' });

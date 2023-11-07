@@ -25,7 +25,7 @@ const SlideDragable = ({filterCriteria, setFilterCriteria}) => {
                      setMaxPrice(values[1] === 200 ? null : values[1]);
                  }}
              />
-             <Link
+             <Link to=""
                  className="btn btn-secondary btnhover d-block m-t60"
                  onClick={() => setFilterCriteria({
                      ...filterCriteria,

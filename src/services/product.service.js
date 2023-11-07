@@ -15,6 +15,7 @@ export const getProductDetail = async (slug) => {
     const endpoint = `Product/get_by_slug/${slug}`;
     try {
         const response = await api.get(endpoint);
+
         return response.data;
     } catch (error) {
         console.error('Error fetching filtered products:', error);

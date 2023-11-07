@@ -35,11 +35,14 @@ import ContactUs from './ContactUs';
 import ErrorPage from './ErrorPage';
 import UnderConstruction from './UnderConstruction';
 import ComingSoon from './ComingSoon';
-
+import OrderHistory from "./OrderHistory";
+import OrderHistoryDetail from "./OrderHistoryDetail";
+import ReturnRequestHistory from "./ReturnRequestHistory";
+import ReturnRequestHistoryDetail from "./ReturnRequestHistoryDetail";
 
 //images
 import logo from './../assets/images/logo.png';
-import logoWhite from './../assets/images/logo-white.png';
+
 
 function Index(props){
 	var baseName = '';
@@ -78,6 +81,10 @@ function Index(props){
 								<Route path='/blog-list-sidebar' exact component={BlogListSidebar} />
 								<Route path='/blog-detail' exact component={BlogDetail} />
 								<Route path='/contact-us' exact component={ContactUs} />
+								<Route path='/order-history' exact component={OrderHistory} />
+								<Route path='/order-history-detail/:code' exact component={OrderHistoryDetail} />
+								<Route path='/return_request_history' exact component={ReturnRequestHistory} />
+								<Route path='/return_request_history/:code' exact component={ReturnRequestHistoryDetail} />
 							</Switch>
 						</Main>
 						<Footer  footerChange="style-1" logoImage={logo}/>

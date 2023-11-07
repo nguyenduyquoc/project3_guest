@@ -57,7 +57,7 @@ const OrderPaymentStatus = ({paymentSuccess, setPaymentStatus, createdOrder}) =>
                             </tbody>
                         </table>
                         {paymentSuccess ?
-                            <Link to="/" class="btn btn-primary" >
+                            <Link to="/" className="btn btn-primary" >
                                 Back to Home
                                 <i className="fa fa-angle-right m-l10"></i>
                             </Link>

@@ -93,8 +93,8 @@ function Header(){
 	function renderCategoriesDropdownWithPrefix(categories, prefix = '') {
 		return (
 			<React.Fragment>
-				{categories.map((category) => (
-					<React.Fragment key={category.id}>
+				{categories.map((category , index) => (
+					<React.Fragment key={index}>
 						<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
 							{prefix} {category.name}
 						</Dropdown.Item>
@@ -132,8 +132,8 @@ function Header(){
 									</Dropdown.Toggle>
 									<Dropdown.Menu as="ul" className="dropdown-menu cart-list">
 										{
-											cartItems.map(item =>(
-												<li className="cart-item">
+											cartItems.map((item, index) =>(
+												<li className="cart-item" key={index}>
 													<div className="media">
 														<div className="media-left">
 															<Link to={`/shop-detail/${item.slug}`}>
@@ -241,8 +241,8 @@ function Header(){
 									<Dropdown.Menu style={{ maxHeight: "50vh", overflowY: "auto" }}>
 										<Dropdown.Item onClick={() => setSelectBtn("All")}>
 										</Dropdown.Item>
-										{categories.map((category) => (
-											<React.Fragment key={category.id}>
+										{categories.map((category, index) => (
+											<React.Fragment key={index}>
 												<Dropdown.Item onClick={() => setSelectBtn(category.name)}>
 													{category.name}
 												</Dropdown.Item>

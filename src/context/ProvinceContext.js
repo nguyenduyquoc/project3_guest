@@ -11,9 +11,12 @@ export function useProvinces() {
 export function ProvinceProvider({ children }) {
     const { loadingDispatch } = useLoading();
     const [provinces, setProvinces] = useState([]);
+
+    const [address, setAddress] = useState("");
     const [selectedProvinceId, setSelectedProvinceId] = useState(null);
     const [selectedDistrictId, setSelectedDistrictId] = useState(null);
-    const [deliveryFee, setDeliveryFee] = useState(null);
+    const [selectedDeliveryServiceId, setSelectedDeliveryServiceId] = useState(null);
+    const [selectedService, setSelectedService] = useState(null);
 
     useEffect(() => {
         fetchProvinces();
@@ -33,32 +36,40 @@ export function ProvinceProvider({ children }) {
 
     // Calculate delivery fee based on selectedProvinceId and selectedDistrictId
     useEffect(() => {
-        if (selectedDistrictId) {
+        if (selectedDeliveryServiceId) {
             // Find the selected province
             const selectedProvince = provinces.find((province) => province.id === selectedProvinceId);
             if (selectedProvince) {
                 // Find the selected district within the province
                 const selectedDistrict = selectedProvince.districts.find((district) => district.id === selectedDistrictId);
                 if (selectedDistrict) {
-                    // Set the deliveryFee based on the selected district
-                    setDeliveryFee(selectedDistrict.deliveryFee);
-                    return;
+                    //Find the selected delivery service within the district
+                    const selectedDeliveryService = selectedDistrict.deliveryServices.find((deliveryService) => deliveryService.id === selectedDeliveryServiceId);
+                    if (selectedDeliveryService) {
+                        // Set the deliveryFee based on the selected district
+                        setSelectedService(selectedDeliveryService);
+                        return;
+                    }
                 }
             }
         }
-        // If no district selected or not found, set deliveryFee to null
-        setDeliveryFee(null);
-    }, [selectedDistrictId, provinces, selectedProvinceId]);
+        // If no delivery service selected or not found, set deliveryFee to null
+        setSelectedService(null);
+
+    }, [selectedDeliveryServiceId]);
+
 
     return (
         <ProvinceContext.Provider
             value={{
                 provinces,
+                address, setAddress,
                 selectedProvinceId,
                 selectedDistrictId,
                 setSelectedProvinceId,
                 setSelectedDistrictId,
-                deliveryFee
+                selectedDeliveryServiceId, setSelectedDeliveryServiceId,
+                selectedService
             }}
         >
             {children}

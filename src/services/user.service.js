@@ -32,3 +32,47 @@ export const likeOrUnlikeProduct = async (id) => {
         throw error;
     }
 }
+
+export const getOrderHistory = async () => {
+    const endpoint = `User/order_history`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const getOrderHistoryDetail = async (code) => {
+    const endpoint = `User/order_detail/${code}`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const getReturnRequestHistory = async () => {
+    const endpoint = `User/return_request_history`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const getReturnRequestHistoryDetail = async (id) => {
+    const endpoint = `user/return_request/${id}`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

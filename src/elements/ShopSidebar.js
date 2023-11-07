@@ -187,7 +187,7 @@ const ShopSidebar = ({filterCriteria, setFilterCriteria, setShowSidebar}) =>{
             <div className="shop-filter">
                 <div className="d-flex justify-content-between">
                     <h4 className="title">Filter Option</h4>
-                    <Link
+                    <Link to=""
                         className="panel-close-btn"
                         onClick={() => setShowSidebar(false)}
                     ><i className="flaticon-close"></i>
@@ -293,7 +293,7 @@ const ShopSidebar = ({filterCriteria, setFilterCriteria, setShowSidebar}) =>{
                 <div className="row filter-buttons">
                     <div>
                         {/*<Link to={"#"} className="btn btn-secondary btnhover mt-4 d-block">Refine Search</Link>*/}
-                        <Link
+                        <Link to=""
                             className="btn btn-outline-secondary btnhover mt-3 d-block"
                             onClick={() => setFilterCriteria({
                                 page: 1,
