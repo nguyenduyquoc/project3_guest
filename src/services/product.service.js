@@ -32,3 +32,14 @@ export const getPublishYears = async () => {
         throw error;
     }
 }
+
+export const getRelatedProducts = async (productId, limit) => {
+    const endpoint = `Product/related_products/${productId}`;
+    try {
+        const response = await api.get(endpoint, {params: {limit}});
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
